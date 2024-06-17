@@ -54,7 +54,8 @@
           </ion-select>
         </ion-item>
 
-        <ion-button expand="block" (click)="addItem()">Add Item</ion-button>
+        <ion-button expand="block"  [disabled]="selectedUsers.length == 0 || itemPrice == null || itemName == '' "
+         (click)="addItem()">Add Item</ion-button>
 
       </ion-col>
     </ion-row>
