@@ -40,15 +40,11 @@ export class Tab3Page {
 
   }
 
-
   showSummaryToUsers(){
     this.showSummary = true;
     this.userGroupOwingSummary = this.splitService.getUserGroupOwingSummary();
     this.totalOwedByUsers = this.splitService.getTotalOwedByEachUser();
     this.totalBillAmount = this.splitService.getTotalBillAmount();
   }
-
-
-  
 
 }
