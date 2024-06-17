@@ -39,6 +39,12 @@
           <ion-input [(ngModel)]="itemPrice" placeholer="null" type="number"></ion-input>
         </ion-item>
 
+         <ion-item>
+          <ion-label>Tax Percent</ion-label>
+          <ion-select [(ngModel)]="itemTax">
+            <ion-select-option *ngFor="let tax of taxOptions" [value]="tax">{{ tax }}%</ion-select-option>
+          </ion-select>
+        </ion-item>
 
         <ion-item>
           <ion-label>Split among:</ion-label>
@@ -55,12 +61,11 @@
 
     <ion-row>
       <ion-col>
-        <ion-list *ngFor="let userOwed of totalOwedByUsers">
-          <ion-item>
-            <ion-label>
-              <h2>{{ userOwed.userName }}</h2>
-              <p><strong>Total Owed: </strong>{{ userOwed.totalOwed | currency }}</p>
-            </ion-label>
+        <ion-list>
+          <ion-item *ngFor="let userOwed of totalOwedByUsers">
+            <ion-label>{{ userOwed.userName }}</ion-label>
+            <ion-note slot="end">Total Owed: {{ userOwed.totalOwed | currency }}</ion-note>
+            <ion-note slot="end">Tax Included: {{ userOwed.totalTax | currency }}</ion-note>
           </ion-item>
         </ion-list>
       </ion-col>
@@ -91,7 +96,7 @@
                   <strong>Item/s: </strong>{{ item.itemName }}
                 </div>
                 <div>
-                  <strong>Price: </strong>{{ item.itemPrice | currency }}
+                  <strong>Price: </strong>{{ item.itemPrice | currency }} + {{ item.taxPercent }}% Tax = {{item.totalPrice  | currency}}
                 </div>
               </ion-label>
             </ion-item>

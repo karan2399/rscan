@@ -43,35 +43,24 @@ export class SplitService {
 
 
 
-
-    // addItem(itemName: string, itemPrice: number, selectedUsers: string[]) {
-    //     // Check if an item with the same users combination already exists
-    //     const existingItemIndex = this.items.findIndex(item => this.areArraysEqual(item.users, selectedUsers));
-
-    //     if (existingItemIndex !== -1) {
-    //         // If exists, update the item price
-    //         this.items[existingItemIndex].itemPrice += itemPrice;
-    //     } else {
-    //         // If not exists, add a new item
-    //         this.items.push({ itemName, itemPrice, users: selectedUsers });
-    //     }
-    // }
-    addItem(itemName: string, itemPrice: number, selectedUsers: string[]) {
+    addItem(itemName: string, itemPrice: number, selectedUsers: string[], taxPercent: number) {
+      const totalPrice = itemPrice + (itemPrice * taxPercent / 100);
+  
       // Check if an item with the same users combination already exists
-      const existingItem = this.items.find(item => this.areArraysEqual(item.users, selectedUsers));
+      const existingItem = this.items.find(item => this.areArraysEqual(item.users, selectedUsers) && item.taxPercent === taxPercent);
   
       if (existingItem) {
         // If exists, update the item price and merge item names (if not already added)
         existingItem.itemPrice += itemPrice;
+        existingItem.totalPrice += totalPrice;
         if (!existingItem.itemName.includes(itemName)) {
           existingItem.itemName += `, ${itemName}`;
         }
       } else {
         // If not exists, add a new item
-        this.items.push({ itemName, itemPrice, users: selectedUsers });
+        this.items.push({ itemName, itemPrice, users: selectedUsers, taxPercent, totalPrice });
       }
     }
-    
 
     private areArraysEqual(array1: any[], array2: any[]): boolean {
         if (array1.length !== array2.length) {
@@ -87,11 +76,9 @@ export class SplitService {
     
 
 
-
-    getItems() {
-        return this.items;
+    getItems(): Item[] {
+      return this.items;
     }
-
     getUsers() {
         return this.users;
     }
@@ -130,52 +117,51 @@ export class SplitService {
         }));
       }
 
-      getTotalOwedByEachUser(): { userName: string, totalOwed: number }[] {
-        const totalOwedByUser: { [userName: string]: number } = {};
+      getTotalOwedByEachUser(): { userName: string, totalOwed: number, totalTax: number }[] {
+        const totalOwedByUser: { [userName: string]: { amountOwed: number, taxOwed: number } } = {};
     
-        // Initialize total owed for each user
+        // Initialize total owed and tax owed for each user
         this.users.forEach(user => {
-          if (user !== 'All') {
-            totalOwedByUser[user] = 0;
-          }
+          totalOwedByUser[user] = { amountOwed: 0, taxOwed: 0 };
         });
     
-        // Iterate through each item to calculate the total amount owed by each user
+        // Iterate through each item to calculate the total amount and tax owed by each user
         this.items.forEach(item => {
-          const { itemPrice, users } = item;
+          const { totalPrice, itemPrice, users, taxPercent } = item;
           const splitAmount = itemPrice / users.length;
+          const splitTax = (itemPrice * taxPercent / 100) / users.length;
     
           users.forEach(user => {
-            if (user !== 'All') {
-              totalOwedByUser[user] += splitAmount;
-            }
+            totalOwedByUser[user].amountOwed += splitAmount;
+            totalOwedByUser[user].taxOwed += splitTax;
           });
         });
     
         // Convert object to array for easier iteration in templates
         return Object.keys(totalOwedByUser).map(userName => ({
           userName,
-          totalOwed: totalOwedByUser[userName]
+          totalOwed: totalOwedByUser[userName].amountOwed + totalOwedByUser[userName].taxOwed,
+          totalTax: totalOwedByUser[userName].taxOwed
         }));
       }
 
       getTotalBillAmount(): number {
-        return this.items.reduce((total, item) => total + item.itemPrice, 0);
+        return this.items.reduce((total, item) => total + item.totalPrice, 0);
       }
 
-      getItemsSharedPerGroup(): { userGroup: string[], items: { itemName: string, itemPrice: number }[] }[] {
-        const itemsPerGroup: { [userGroup: string]: { itemName: string, itemPrice: number }[] } = {};
+      getItemsSharedPerGroup(): { userGroup: string[], items: { itemName: string, itemPrice: number, taxPercent: number, totalPrice: number }[] }[] {
+        const itemsPerGroup: { [userGroup: string]: { itemName: string, itemPrice: number, taxPercent: number, totalPrice: number }[] } = {};
     
         // Iterate through each item to organize them by user group
         this.items.forEach(item => {
-          const { itemName, itemPrice, users } = item;
+          const { itemName, itemPrice, taxPercent, totalPrice, users } = item;
           const userGroupKey = users.join(', ');
     
           if (!itemsPerGroup[userGroupKey]) {
             itemsPerGroup[userGroupKey] = [];
           }
     
-          itemsPerGroup[userGroupKey].push({ itemName, itemPrice });
+          itemsPerGroup[userGroupKey].push({ itemName, itemPrice, taxPercent, totalPrice });
         });
     
         // Convert object to array for easier iteration in templates
@@ -184,12 +170,15 @@ export class SplitService {
           items: itemsPerGroup[userGroupKey]
         }));
       }
+    
 
-      deleteItem(item: { itemName: string, itemPrice: number, users: string[] }): void {
+      deleteItem(item: { itemName: string, itemPrice: number, users: string[], taxPercent: number, totalPrice: number }): void {
         const index = this.items.findIndex(i => 
           i.itemName === item.itemName && 
           i.itemPrice === item.itemPrice && 
-          this.areArraysEqual(i.users, item.users)
+          this.areArraysEqual(i.users, item.users) &&
+          i.taxPercent === item.taxPercent &&
+          i.totalPrice === item.totalPrice
         );
     
         if (index !== -1) {
