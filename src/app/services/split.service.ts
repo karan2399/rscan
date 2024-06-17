@@ -120,4 +120,37 @@ export class SplitService {
         return this.items.reduce((total, item) => total + item.itemPrice, 0);
       }
 
+      getItemsSharedPerGroup(): { userGroup: string[], items: { itemName: string, itemPrice: number }[] }[] {
+        const itemsPerGroup: { [userGroup: string]: { itemName: string, itemPrice: number }[] } = {};
+    
+        // Iterate through each item to organize them by user group
+        this.items.forEach(item => {
+          const { itemName, itemPrice, users } = item;
+          const userGroupKey = users.join(', ');
+    
+          if (!itemsPerGroup[userGroupKey]) {
+            itemsPerGroup[userGroupKey] = [];
+          }
+    
+          itemsPerGroup[userGroupKey].push({ itemName, itemPrice });
+        });
+    
+        // Convert object to array for easier iteration in templates
+        return Object.keys(itemsPerGroup).map(userGroupKey => ({
+          userGroup: userGroupKey.split(', '),
+          items: itemsPerGroup[userGroupKey]
+        }));
+      }
+
+      deleteItem(item: { itemName: string, itemPrice: number, users: string[] }): void {
+        const index = this.items.findIndex(i => 
+          i.itemName === item.itemName && 
+          i.itemPrice === item.itemPrice && 
+          this.areArraysEqual(i.users, item.users)
+        );
+    
+        if (index !== -1) {
+          this.items.splice(index, 1);
+        }
+      }
 }

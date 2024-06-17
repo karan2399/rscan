@@ -17,6 +17,7 @@ export class Tab3Page {
 
   showSummary: boolean = false;
   userGroupOwingSummary: { userGroup: string[], totalOwed: number, userDetails: { userName: string, amountOwed: number }[] }[] = [];
+  sharedItemsByGroup: { userGroup: string[], items: { itemName: string, itemPrice: number }[] }[] = [];
 
   totalOwedByUsers: { userName: string, totalOwed: number }[] = [];
 
@@ -37,6 +38,7 @@ export class Tab3Page {
       this.itemPrice = 0;
       this.selectedUsers = [];
     }
+    this.showSummaryToUsers();
 
   }
 
@@ -45,6 +47,12 @@ export class Tab3Page {
     this.userGroupOwingSummary = this.splitService.getUserGroupOwingSummary();
     this.totalOwedByUsers = this.splitService.getTotalOwedByEachUser();
     this.totalBillAmount = this.splitService.getTotalBillAmount();
+    this.sharedItemsByGroup = this.splitService.getItemsSharedPerGroup();
+  }
+
+  deleteItem(item: { itemName: string, itemPrice: number, users: string[] }) {
+    this.splitService.deleteItem(item);
+    this.showSummaryToUsers();
   }
 
 }
