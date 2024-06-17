@@ -1,0 +1,113 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Manage
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Manage</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+
+
+
+  <ion-grid>
+
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-item *ngFor="let item of splitService.getItems()">
+            <ion-label>{{ item.itemName }}</ion-label>
+            <ion-note slot="end">{{ item.itemPrice | currency }}</ion-note>
+            <ion-note slot="end">Split among: {{ item.users.join(', ') }}</ion-note>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Item Name</ion-label>
+          <ion-input [(ngModel)]="itemName" type="text"></ion-input>
+        </ion-item>
+      
+        <ion-item>
+          <ion-label position="floating">Item Price</ion-label>
+          <ion-input [(ngModel)]="itemPrice" type="number"></ion-input>
+        </ion-item>
+
+
+        <ion-item>
+          <ion-label>Split among:</ion-label>
+          <ion-select multiple="true" [(ngModel)]="selectedUsers">
+            <ion-select-option *ngFor="let user of splitService.getUsers()" [value]="user">{{ user }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-button expand="block" (click)="addItem()">Add Item</ion-button>
+      
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" (click)="showSummaryToUsers()">Summary</ion-button>
+      </ion-col>
+    </ion-row>
+    
+
+    <ion-row *ngIf="showSummary">
+      <!-- <ion-col>
+        <ion-list *ngFor="let groupSummary of userGroupOwingSummary">
+          <ion-item>
+            <ion-label>
+              <h2>User Group: {{ groupSummary.userGroup.join(', ') }}</h2>
+              <p><strong>Total Owed: </strong>{{ groupSummary.totalOwed | currency }}</p>
+            </ion-label>
+          </ion-item>
+          <ion-list *ngFor="let userDetail of groupSummary.userDetails">
+            <ion-item>
+              <ion-label>
+                <div>
+                  <strong>User: </strong>{{ userDetail.userName }}
+                </div>
+                <div>
+                  <strong>Amount Owed: </strong>{{ userDetail.amountOwed | currency }}
+                </div>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-list>
+      </ion-col> -->
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-list *ngFor="let userOwed of totalOwedByUsers">
+          <ion-item>
+            <ion-label>
+              <h2>{{ userOwed.userName }}</h2>
+              <p><strong>Total Owed: </strong>{{ userOwed.totalOwed | currency }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>
+            <h2>Total Bill Amount</h2>
+            <p><strong>{{ totalBillAmount | currency }}</strong></p>
+          </ion-label>
+        </ion-item>
+      
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

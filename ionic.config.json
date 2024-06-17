@@ -1,0 +1,7 @@
+{
+  "name": "rscan",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
