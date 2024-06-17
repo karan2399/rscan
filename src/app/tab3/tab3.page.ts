@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MenuController } from '@ionic/angular';
 import { SplitService } from '../services/split.service';
 
 @Component({
@@ -7,7 +8,11 @@ import { SplitService } from '../services/split.service';
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page {
+  constructor(private menu: MenuController) { }
 
- 
+
+  closeMenu(){
+    this.menu.close();
+  }
 
 }

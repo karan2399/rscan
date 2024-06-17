@@ -1,4 +1,9 @@
 <ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Split It
+    </ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -31,7 +36,7 @@
 
         <ion-item>
           <ion-label position="floating">Item Price</ion-label>
-          <ion-input [(ngModel)]="itemPrice" type="number"></ion-input>
+          <ion-input [(ngModel)]="itemPrice" placeholer="null" type="number"></ion-input>
         </ion-item>
 
 
@@ -83,7 +88,7 @@
             <ion-item>
               <ion-label>
                 <div>
-                  <strong>Item: </strong>{{ item.itemName }}
+                  <strong>Item/s: </strong>{{ item.itemName }}
                 </div>
                 <div>
                   <strong>Price: </strong>{{ item.itemPrice | currency }}

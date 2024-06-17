@@ -44,17 +44,32 @@ export class SplitService {
 
 
 
-    addItem(itemName: string, itemPrice: number, selectedUsers: string[]) {
-        // Check if an item with the same users combination already exists
-        const existingItemIndex = this.items.findIndex(item => this.areArraysEqual(item.users, selectedUsers));
+    // addItem(itemName: string, itemPrice: number, selectedUsers: string[]) {
+    //     // Check if an item with the same users combination already exists
+    //     const existingItemIndex = this.items.findIndex(item => this.areArraysEqual(item.users, selectedUsers));
 
-        if (existingItemIndex !== -1) {
-            // If exists, update the item price
-            this.items[existingItemIndex].itemPrice += itemPrice;
-        } else {
-            // If not exists, add a new item
-            this.items.push({ itemName, itemPrice, users: selectedUsers });
+    //     if (existingItemIndex !== -1) {
+    //         // If exists, update the item price
+    //         this.items[existingItemIndex].itemPrice += itemPrice;
+    //     } else {
+    //         // If not exists, add a new item
+    //         this.items.push({ itemName, itemPrice, users: selectedUsers });
+    //     }
+    // }
+    addItem(itemName: string, itemPrice: number, selectedUsers: string[]) {
+      // Check if an item with the same users combination already exists
+      const existingItem = this.items.find(item => this.areArraysEqual(item.users, selectedUsers));
+  
+      if (existingItem) {
+        // If exists, update the item price and merge item names (if not already added)
+        existingItem.itemPrice += itemPrice;
+        if (!existingItem.itemName.includes(itemName)) {
+          existingItem.itemName += `, ${itemName}`;
         }
+      } else {
+        // If not exists, add a new item
+        this.items.push({ itemName, itemPrice, users: selectedUsers });
+      }
     }
     
 

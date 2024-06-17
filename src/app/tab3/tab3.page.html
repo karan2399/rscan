@@ -6,9 +6,9 @@
     <ion-title>Manage</ion-title>
   </ion-toolbar>
 </ion-header>
-
+<app-inner-menu></app-inner-menu>
 <ion-content id="tab3-content">
-  <app-inner-menu></app-inner-menu>
+ 
   <!-- Your content for Tab 3 goes here -->
-  <ion-router-outlet></ion-router-outlet>
+  <ion-router-outlet (ionNavWillChange)="closeMenu()"> </ion-router-outlet>
 </ion-content>
