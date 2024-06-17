@@ -6,6 +6,21 @@ const routes: Routes = [
   {
     path: '',
     component: Tab3Page,
+    children: [
+      {
+        path: 'users',
+        loadChildren: () => import('./user-management/user-management.module').then(m => m.UserManagementModule),
+      },
+      {
+        path: 'split',
+        loadChildren: () => import('./splitwise/splitwise.module').then(m => m.SplitwiseModule)
+      },
+      {
+        path: '',
+        redirectTo: 'users',
+        pathMatch: 'full'
+      }
+    ]
   }
 ];
 

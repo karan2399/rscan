@@ -8,9 +8,37 @@ export class SplitService {
 
 
     private items: Item[] = [];
-    private users: string[] = ['All', 'Karan', 'Vishal', 'Henil', 'DK', 'Pandya', 'Tej', 'DJ']; // Example users list
+    // private users: string[] = ['All', 'Karan', 'Vishal', 'Henil', 'DK', 'Pandya', 'Tej', 'DJ']; // Example users list
+    public users: string[] = [];
 
-    constructor() { }
+
+    constructor() { 
+      this.loadUsers();
+    }
+
+    addUser(user: string) {
+      if (!this.users.includes(user)) {
+        this.users.push(user);
+      }
+    }
+
+    
+    removeUser(user: string) {
+      this.users = this.users.filter(u => u !== user);
+    }
+  
+    setUsers(users: string[]) {
+      this.users = users;
+    }
+  
+    private loadUsers() {
+      const users = localStorage.getItem('users');
+      if (users) {
+        this.users = JSON.parse(users);
+      } else {
+        this.users = [];
+      }
+    }
 
 
 

@@ -6,6 +6,10 @@ import { Tab3Page } from './tab3.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
 import { Tab3PageRoutingModule } from './tab3-routing.module';
+import { UserManagementModule } from './user-management/user-management.module';
+import { InnerMenuModule } from './inner-menu/inner-menu.module';
+import { SplitwiseModule } from './splitwise/splitwise.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
@@ -13,7 +17,11 @@ import { Tab3PageRoutingModule } from './tab3-routing.module';
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    Tab3PageRoutingModule
+    Tab3PageRoutingModule,
+    UserManagementModule,
+    InnerMenuModule,
+    SplitwiseModule,
+    RouterModule
   ],
   declarations: [Tab3Page]
 })
