@@ -17,7 +17,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'users',
+        redirectTo: 'split',
         pathMatch: 'full'
       }
     ]
