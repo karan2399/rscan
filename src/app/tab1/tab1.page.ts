@@ -11,17 +11,20 @@ export class Tab1Page implements OnInit{
 
   receipt!: Receipt;
 
+  currentDate!: Date;
+  currentDay!: string;
+  currentDateFormatted!: string;
+  amPm!: string;
   constructor(public ocrService:OcrService) {
 
   }
 
   ngOnInit(){
+    this.currentDate = new Date();
+    this.amPm =   this.currentDate.getHours() >= 12 ? ' PM' : ' AM';
+    this.currentDateFormatted = this.currentDate.getFullYear() + "-" + (this.currentDate.getMonth() + 1) + "-" + this.currentDate.getDate() + " " +  this.currentDate.getHours() + ":" + this.currentDate.getMinutes() + this.amPm;
+    this.currentDay = this.currentDate.toLocaleDateString('en-US', { weekday: 'long' });        
   }
-  loadReceipt(){
-    this.receipt = this.ocrService.getReceipt();
-    this.ocrService.parseProducts(this.ocrService.getText());
-    console.log(this.receipt);
-    
-  }
+  
 
 }
