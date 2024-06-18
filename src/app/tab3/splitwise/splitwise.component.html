@@ -1,15 +1,15 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-     Split IT
+     Split
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+  <ion-header >
     <ion-toolbar>
-      <ion-title size="large">Manage</ion-title>
+      <!-- <ion-title size="large">Manage</ion-title> -->
     </ion-toolbar>
   </ion-header>
   <ion-grid>
@@ -65,8 +65,8 @@
         <ion-list>
           <ion-item *ngFor="let userOwed of totalOwedByUsers">
             <ion-label>{{ userOwed.userName }}</ion-label>
-            <ion-note slot="end">Total Owed: {{ userOwed.totalOwed | currency }}</ion-note>
-            <ion-note slot="end">Tax Included: {{ userOwed.totalTax | currency }}</ion-note>
+            <ion-note slot="end">Total Owed: {{ userOwed.totalOwed | currency }}</ion-note> 
+            <ion-note slot="end">Tax: {{ userOwed.totalTax | currency }}</ion-note>
           </ion-item>
         </ion-list>
       </ion-col>

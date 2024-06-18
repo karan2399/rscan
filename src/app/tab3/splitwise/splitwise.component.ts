@@ -46,6 +46,7 @@ export class SplitwiseComponent  implements OnInit {
       this.selectedUsers = [];
     }
     this.showSummaryToUsers();
+    this.itemTax = 0;
 
   }
 

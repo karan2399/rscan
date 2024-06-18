@@ -1,18 +1,10 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Home
-    </ion-title>
+    <ion-title>Home</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Home</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
+<ion-content>
   <ion-grid>
     <!-- src/app/receipt-parser/receipt-parser.component.html -->
     <div *ngIf="receipt">
@@ -48,12 +40,6 @@
       <p>Receipt Number: {{ receipt.receiptNumber }}</p>
       <p>Cashier: {{ receipt.cashier }}</p>
     </div>
-    <div>
-   
-   <app-user-management></app-user-management>
-    </div>
-
-
   </ion-grid>
 
   <ion-fab vertical="bottom" horizontal="center" slot="fixed">

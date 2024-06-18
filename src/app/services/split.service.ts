@@ -119,12 +119,13 @@ export class SplitService {
 
       getTotalOwedByEachUser(): { userName: string, totalOwed: number, totalTax: number }[] {
         const totalOwedByUser: { [userName: string]: { amountOwed: number, taxOwed: number } } = {};
-    
+
+        
         // Initialize total owed and tax owed for each user
         this.users.forEach(user => {
           totalOwedByUser[user] = { amountOwed: 0, taxOwed: 0 };
         });
-    
+        
         // Iterate through each item to calculate the total amount and tax owed by each user
         this.items.forEach(item => {
           const { totalPrice, itemPrice, users, taxPercent } = item;
@@ -136,13 +137,15 @@ export class SplitService {
             totalOwedByUser[user].taxOwed += splitTax;
           });
         });
-    
+      
         // Convert object to array for easier iteration in templates
         return Object.keys(totalOwedByUser).map(userName => ({
           userName,
           totalOwed: totalOwedByUser[userName].amountOwed + totalOwedByUser[userName].taxOwed,
           totalTax: totalOwedByUser[userName].taxOwed
         }));
+      
+        
       }
 
       getTotalBillAmount(): number {
