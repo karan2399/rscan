@@ -8,6 +8,8 @@ import { SplitService } from 'src/app/services/split.service';
 })
 export class UserManagementComponent {
   newUser: string = '';
+  isToastOpen = false;
+  isRToastOpen = false;
 
   constructor(public splitService: SplitService) {
     this.loadUsers();
@@ -27,11 +29,13 @@ export class UserManagementComponent {
 
   removeUser(user: string) {
     this.splitService.removeUser(user);
+    this.setROpen(true);
     // this.saveUsers();
   }
 
   private saveUsers() {
     localStorage.setItem('users', JSON.stringify(this.splitService.getUsers()));
+    this.setOpen(true);
   }
 
   private loadUsers() {
@@ -40,4 +44,13 @@ export class UserManagementComponent {
       this.splitService.setUsers(JSON.parse(users));
     }
   }
+
+  setOpen(isOpen: boolean) {
+    this.isToastOpen = isOpen;
+  }
+
+  setROpen(isROpen:boolean){
+    this.isRToastOpen = isROpen;
+  }
+
 }

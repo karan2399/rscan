@@ -26,6 +26,23 @@
       <ion-button  (click)="doneAddingUsers()">Done</ion-button>
     </ion-item>
   
+
+    <ion-toast
+    [isOpen]="isToastOpen"
+    message="Users added to your local storage"
+    [duration]="5000"
+    (didDismiss)="setOpen(false)"
+  ></ion-toast>
+
+
+  <ion-toast
+  [isOpen]="isRToastOpen"
+  message="User removed from your local storage"
+  [duration]="5000"
+  (didDismiss)="setROpen(false)"
+></ion-toast>
+
+
   </ion-grid>
   
 </ion-content>
