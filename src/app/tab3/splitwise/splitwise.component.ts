@@ -68,21 +68,34 @@ export class SplitwiseComponent  implements OnInit {
 
   async generatePDF(){
     const element = this.content.nativeElement;
+    const doc = new jsPDF('p', 'mm', 'a4');
 
     const canvas = await html2canvas(element);
     const imgData = canvas.toDataURL('image/png');
-    const doc = new jsPDF();
 
     const imgProps = doc.getImageProperties(imgData);
     const pdfWidth = doc.internal.pageSize.getWidth();
     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    const pageHeight = doc.internal.pageSize.getHeight();
+    let heightLeft = pdfHeight;
 
-    doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    let position = 0;
+
+    doc.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft >= 0) {
+      position = heightLeft - pdfHeight;
+      doc.addPage();
+      doc.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+      heightLeft -= pageHeight;
+    }
+
     // Get current date and time
     const now = new Date();
     const timestamp = now.toISOString().replace(/[-:.]/g, '');
-
     const fileName = `split-report-${timestamp}.pdf`;
+
     doc.save(fileName);
 
   }
