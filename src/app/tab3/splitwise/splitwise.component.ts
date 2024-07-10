@@ -78,6 +78,12 @@ export class SplitwiseComponent  implements OnInit {
     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
     doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    doc.save('split-content.pdf');
+    // Get current date and time
+    const now = new Date();
+    const timestamp = now.toISOString().replace(/[-:.]/g, '');
+
+    const fileName = `split-report-${timestamp}.pdf`;
+    doc.save(fileName);
+
   }
 }
