@@ -66,6 +66,8 @@ export class SplitwiseComponent  implements OnInit {
     this.showSummaryToUsers();
   }
 
+
+  //PDF printing
   async generatePDF(){
     const element = this.content.nativeElement;
     const doc = new jsPDF('p', 'mm', 'a4');
