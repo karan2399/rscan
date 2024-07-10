@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Item } from 'src/app/models/item.modal';
 import { SplitService } from 'src/app/services/split.service';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-splitwise',
@@ -8,6 +10,7 @@ import { SplitService } from 'src/app/services/split.service';
   styleUrls: ['./splitwise.component.scss'],
 })
 export class SplitwiseComponent  implements OnInit {
+  @ViewChild('printContent', { static: false }) content!: ElementRef;
   itemName: string = '';
   itemPrice: number = 0;
   selectedUsers: string[] = [];
@@ -63,4 +66,18 @@ export class SplitwiseComponent  implements OnInit {
     this.showSummaryToUsers();
   }
 
+  async generatePDF(){
+    const element = this.content.nativeElement;
+
+    const canvas = await html2canvas(element);
+    const imgData = canvas.toDataURL('image/png');
+    const doc = new jsPDF();
+
+    const imgProps = doc.getImageProperties(imgData);
+    const pdfWidth = doc.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+    doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    doc.save('split-content.pdf');
+  }
 }
