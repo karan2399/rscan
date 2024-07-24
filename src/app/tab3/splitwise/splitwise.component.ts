@@ -17,6 +17,7 @@ export class SplitwiseComponent  implements OnInit {
   totalBillAmount: number = 0;
 
   taxOptions = [0, 5, 13, 15, 20];
+  items: any[] = [];
 
   // userName: string = 'Karan'; 
 
@@ -31,6 +32,10 @@ export class SplitwiseComponent  implements OnInit {
   constructor(public splitService: SplitService) {}
 
   ngOnInit(): void {
+    const count = this.items.length + 1;
+    for (let i = 0; i < 50; i++) {
+      this.items.push('item');
+    }
       
   }
 
